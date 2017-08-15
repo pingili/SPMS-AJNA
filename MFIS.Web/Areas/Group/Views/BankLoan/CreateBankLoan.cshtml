@@ -14,7 +14,7 @@
     string message = res != null ? res.Message : string.Empty;
     if (!string.IsNullOrWhiteSpace(message))
     {
-       // loanCode = ViewBag.Result.ObjectCode;
+        // loanCode = ViewBag.Result.ObjectCode;
     }
     string LoanApplicationDate = string.Empty;
     <div class="row">
@@ -46,7 +46,7 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Bank Name</label><br>
-                                    @Html.DropDownListFor(d => Model.BankEntryId, (SelectList)ViewBag.slBankAh, "Select Bank", new { @class = "form-control required" })
+                                    @Html.DropDownListFor(d => Model.BankEntryId, (SelectList)ViewBag.slBankAh, "Select Bank", new { @class = "form-control required", @id = "BankEntryId" })
                                     @Html.HiddenFor(m => m.LoanCode)
                                 </div>
                             </div>
@@ -54,13 +54,15 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Requested Loan Date</label><br>
-                                    @Html.TextBox("LoanRequestDate", Model.LoanRequestDate, new { @class = "form-control required", @id = "LoanRequestDate" })
+                                    @{ string LoanRequestDate = Model.LoanRequestDate.Ticks > 0 ? Model.LoanRequestDate.ToString("dd/MMM/yyyy") : string.Empty;
+                                        <input type="text" value="@LoanRequestDate" class="form-control Date-Only financial-year-begin-date-picker required" id="LoanRequestDate" name="LoanRequestDate"  placeholder="Select Date" />
+                                    }
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Requested Loan Amount</label>
-                                    @Html.TextBox("LoanAmountRequested", Model.LoanAmountRequested.ToDisplayCurrency(), new { @class = "form-control required number-only", @onchange = "ChangeLoanAmount();" })
+                                    @Html.TextBox("LoanAmountRequested", Model.LoanAmountRequested.ToDisplayCurrency(), new { @class = "form-control required number-only", @id = "LoanAmountRequested" })
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -85,7 +87,9 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Loan Approved Date</label><br>
-                                    @Html.TextBox("LoanAmountApprovedDate", Model.LoanAmountApprovedDate, new { @class = "form-control required", @id = "txtLoanApprovedDate" })
+                                    @{ string LoanAmountApprovedDate = Model.LoanAmountApprovedDate.Ticks > 0 ? Model.LoanAmountApprovedDate.ToString("dd/MMM/yyyy") : string.Empty;
+                                        <input type="text" value="@LoanAmountApprovedDate" class="form-control Date-Only financial-year-begin-date-picker required" id="LoanAmountApprovedDate" name="LoanAmountApprovedDate"  placeholder="Select Date" />
+                                    }
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -107,19 +111,21 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>DisbursementDate</label><br>
-                                    @Html.TextBox("DisbursedDate", Model.DisbursedDate, new { @class = "form-control required", @id = "DisbursedDate" })
+                                    @{ string DisbursedDate = Model.DisbursedDate.Ticks > 0 ? Model.DisbursedDate.ToString("dd/MMM/yyyy") : string.Empty;
+                                        <input type="text" value="@DisbursedDate" class="form-control Date-Only financial-year-begin-date-picker required" id="DisbursedDate" name="DisbursedDate"  placeholder="Select Date" />
+                                    }
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Disbursed Amount</label>
-                                    @Html.TextBox("DisbursedAmount", Model.DisbursedAmount.ToDisplayCurrency(), new { @class = "form-control required number-only" })
+                                    @Html.TextBox("DisbursedAmount", Model.DisbursedAmount.ToDisplayCurrency(), new { @class = "form-control required number-only", @id = "DisbursedAmount" })
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>No.Of Installments</label>
-                                    <input type="text" name="NoofInstallments" maxlength="3" id="NoofInstallments" class="form-control required number-only"  />
+                                    <input type="text" name="NoofInstallments" maxlength="3" id="NoofInstallments" class="form-control required number-only" />
                                 </div>
                             </div>
 
@@ -139,13 +145,15 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>EMI</label>
-                                    @Html.TextBoxFor(m => m.EMI, new { @class = "form-control required number-only" })
+                                    @Html.TextBoxFor(m => m.EMI, new { @class = "form-control required number-only", @id = "EMI" })
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>DueDate</label>
-                                    @Html.TextBox("DueDate", Model.DueDate, new { @class = "form-control required", @id = "DueDate" })
+                                    @{ string DueDate = Model.DueDate.Ticks > 0 ? Model.DueDate.ToString("dd/MMM/yyyy") : string.Empty;
+                                        <input type="text" value="@DueDate" class="form-control Date-Only financial-year-begin-date-picker required" id="DueDate" name="DueDate"  placeholder="Select Date" />
+                                    }
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -158,17 +166,7 @@
 
                         <div class="panel-footer">
                             <div class="form-group">
-                                @if (!isView)
-                                {
-                                    if (String.IsNullOrEmpty(Model.Status))
-                                    {
-                                        <button type="submit" class="btn btn-outline btn-primary lock-dependent" onclick="return validation();">Submit</button>
-                                    }
-                                    else if (Model.Status.ToUpper() == "INITIATED" && Model.BankLoanId > 0)
-                                    {
-                                        <button type="submit" class="btn btn-outline btn-primary lock-dependent" onclick="return validateConfirm(false);" formaction="ConfirmMemberLoanApplication" formmethod="post">Confirm</button>
-                                    }
-                                }
+                                <button type="submit" class="btn btn-outline btn-primary lock-dependent" onclick="return validation();">Submit</button>
                                 @*<button type="reset" class="btn btn-outline btn-primary" onclick="return resetall('@ecnloanmasterid')">Reset</button>*@
                                 <button type="button" class="btn btn-default pull-right" onclick="BackToList();">Back To List</button>
 
@@ -194,7 +192,7 @@
                     changeYear: true,
                     yearRange: "-60:+0",
                 });
-                $('#txtLoanApprovedDate').datepicker({
+                $('#LoanAmountApprovedDate').datepicker({
                     dateFormat: "dd/M/yy",
                     changeMonth: true,
                     changeYear: true,
@@ -202,7 +200,7 @@
                     onSelect: function (selected) {
                         var dt = new Date(selected);
                         dt.setDate(dt.getDate() + 1);
-                        $("#LoanRequestDate").datepicker("option", "minDate", dt);
+                        $("#LoanRequestDate").datepicker("option", "maxDate", dt);
                     }
 
                 });
@@ -212,11 +210,11 @@
                     changeMonth: true,
                     changeYear: true,
                     yearRange: "-60:+0",
-                   
+
                     onSelect: function (selected) {
                         var dt = new Date(selected);
                         dt.setDate(dt.getDate() + 1);
-                        $("#txtLoanApprovedDate").datepicker("option", "minDate", dt);
+                        $("#LoanAmountApprovedDate").datepicker("option", "minDate", dt);
                     }
                 });
                 $('#DueDate').datepicker({
@@ -229,7 +227,7 @@
                         dt.setDate(dt.getDate() + 1);
                         $("#DisbursedDate").datepicker("option", "minDate", dt);
                     },
-                    
+
                 });
 
             });
@@ -246,7 +244,110 @@
                    }
                }, 'json');
             }
+            function validation() {
+                var validate = true;
+                if ($.trim($('#SLAHIds').val()) == '' && $.trim($('#LoanRequestDate').val()) == '' && $.trim($('#BankEntryId').val()) == '' && $.trim($('#LoanAmountApprovedDate').html()) == '' && $.trim($('#LoanAmountApproved').val()) == '0' && $.trim($('#DisbursedDate').val()) == '' && $.trim($('#NoofInstallments').val()) == '' && $.trim($('#InterestRate').val()) == '0' && $.trim($('#EMI').val()) == '0' ) {
+                    $('#DueDate,LoanAmountRequested,#DisbursedAmount,#SLAHIds,#LoanRequestDate,#BankEntryId,#LoanAmountApprovedDate,#LoanAmountApproved,#DisbursedDate,#NoofInstallments,#InterestRate,#EMI').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#DueDate,LoanAmountRequested,#DisbursedAmount,#SLAHIds,#LoanRequestDate,#BankEntryId,#LoanAmountApprovedDate,#LoanAmountApproved,#DisbursedDate,#NoofInstallments,#InterestRate,#EMI').css('border-color', '');
+
+                }
+                if ($.trim($('#SLAHIds').val()) == '') {
+                    $('#SLAHIds').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#SLAHIds').css('border-color', '');
+
+                }
+                if ($.trim($('#LoanAmountApproved').val()) == '0') {
+                    $('#LoanAmountApplied').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#LoanAmountApproved').css('border-color', '');
+
+                }
+                if ($.trim($('#LoanRequestDate').val()) == '') {
+                    $('#LoanRequestDate').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#LoanRequestDate').css('border-color', '');
+
+                }
+                if ($.trim($('#BankEntryId').val()) == '') {
+                    $('#BankEntryId').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#BankEntryId').css('border-color', '');
+
+                }
+                if ($.trim($('#LoanAmountApprovedDate').val()) == '') {
+                    $('#LoanAmountApprovedDate').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#LoanAmountApprovedDate').css('border-color', '');
+
+                }
+                if ($.trim($('#DueDate').val()) == '') {
+                    $('#DueDate').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#DueDate').css('border-color', '');
+                }
+                if ($.trim($('#DisbursedDate').val()) == '') {
+                    $('#DisbursedDate').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#DisbursedDate').css('border-color', '');
+                }
+                if ($.trim($('#NoofInstallments').val()) == '') {
+                    $('#NoofInstallments').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#NoofInstallments').css('border-color', '');
+                }
+                if ($.trim($('#InterestRate').val()) == '0') {
+                    $('#InterestRate').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#InterestRate').css('border-color', '');
+                }
+                if ($.trim($('#LoanAmountRequested').val()) == '0') {
+                    $('#LoanAmountRequested').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#LoanAmountRequested').css('border-color', '');
+                };
+                if ($.trim($('#DisbursedAmount').val()) == '0') {
+                    $('#DisbursedAmount').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#DisbursedAmount').css('border-color', '');
+                };
+                if ($.trim($('#EMI').val()) == '0') {
+                    $('#EMI').css('border-color', 'red');
+                    validate = false;
+                }
+                else {
+                    $('#EMI').css('border-color', '');
+                }
+
+            if (!validate)
+                    return false;
+            }
         </script>
     }
-}
+                                        }
 
